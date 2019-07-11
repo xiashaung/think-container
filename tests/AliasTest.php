@@ -11,16 +11,7 @@ class Bind
 
 class AliasTest   extends TestCase
 {
-
-
-    public function testBind()
-    {
-        $container = new Container();
-        $container->bind('bind',Bind::class);
-        $container->bind('bind1','bind');
-        self::expectExceptionMessage($container->make('bind1'), new Bind());
-    }
-
+    
     public function testAlias()
     {
         $container = new Container();
