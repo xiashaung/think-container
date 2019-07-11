@@ -255,15 +255,10 @@ class Container implements ContainerInterface, ArrayAccess, IteratorAggregate, C
         if (isset($this->instances[$abstract]) && !$newInstance) {
             return $this->instances[$abstract];
         }
+        $concrete = $this->bind($abstract);
 
-        if (isset($this->bind[$abstract])) {
-            $concrete = $this->bind[$abstract];
-
-            if ($concrete instanceof Closure) {
-                $object = $this->invokeFunction($concrete, $vars);
-            } else {
-                return $this->make($concrete, $vars, $newInstance);
-            }
+        if ($concrete instanceof Closure) {
+            $object = $this->invokeFunction($concrete, $vars);
         } else {
             $object = $this->invokeClass($abstract, $vars);
         }

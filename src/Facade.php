@@ -13,7 +13,7 @@ namespace think;
 /**
  * Facade管理类
  */
-class Facade
+abstract class Facade
 {
     /**
      * 始终创建新的对象实例
@@ -25,14 +25,14 @@ class Facade
      * 创建Facade实例
      * @static
      * @access protected
-     * @param  string $class       类名或标识
+     * @param  string $className       类名或标识
      * @param  array  $args        变量
-     * @param  bool   $newInstance 是否每次创建新的实例
+     * @param  bool $new 是否每次创建新的实例
      * @return object
      */
-    protected static function createFacade(string $class = '', array $args = [], bool $newInstance = false)
+    protected static function createFacade(string $className = '', array $args = [], bool $new = false)
     {
-        $class = $class ?: static::class;
+        $class = $className ?: static::class;
 
         $facadeClass = static::getFacadeClass();
 
@@ -41,30 +41,28 @@ class Facade
         }
 
         if (static::$alwaysNewInstance) {
-            $newInstance = true;
+            $new = true;
         }
 
-        return Container::getInstance()->make($class, $args, $newInstance);
+        return Container::getInstance()->make($class, $args, $new);
     }
 
     /**
      * 获取当前Facade对应类名
      * @access protected
-     * @return string
+     * @return string|mixed
      */
-    protected static function getFacadeClass()
-    {}
+    abstract protected static function getFacadeClass();
 
     /**
      * 带参数实例化当前Facade类
      * @access public
+     * @param $args array
      * @return object
      */
     public static function instance(...$args)
     {
-        if (__CLASS__ != static::class) {
-            return self::createFacade('', $args);
-        }
+        return self::createFacade('', $args);
     }
 
     /**
